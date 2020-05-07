@@ -2,25 +2,12 @@ use chrono::prelude::{Date, DateTime, Local};
 use std::collections::HashMap;
 
 #[derive(Debug)]
-pub struct Page {
+struct Page {
     text: String,
     date: Date<Local>,
     created_at: DateTime<Local>,
     updated_at: DateTime<Local>,
     tags: Vec<String>,
-}
-
-impl Page {
-    pub fn new(text: String) -> Page {
-        let now = Local::now();
-        Page {
-            text,
-            date: Local::today(),
-            created_at: now,
-            updated_at: now,
-            tags: vec![],
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -36,10 +23,21 @@ impl Collection {
             id_cnt: 0,
         }
     }
+
     pub fn add(&mut self, text: String) -> u32 {
         let id = self.id_cnt;
+        let now = Local::now();
 
-        self.pages.insert(id, Page::new(text));
+        self.pages.insert(
+            id,
+            Page {
+                text,
+                date: Local::today(),
+                created_at: now,
+                updated_at: now,
+                tags: vec![],
+            },
+        );
         self.id_cnt += 1;
 
         id
