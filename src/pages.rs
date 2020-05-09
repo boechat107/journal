@@ -24,6 +24,10 @@ impl Collection {
         }
     }
 
+    pub fn len(&self) -> usize {
+        self.pages.len()
+    }
+
     pub fn add(&mut self, text: String) -> u32 {
         let id = self.id_cnt;
         let now = Local::now();

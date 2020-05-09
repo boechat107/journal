@@ -18,7 +18,7 @@ fn exec_action(coll: &mut Collection, input: Journal) -> () {
             println!("New page id: {}", coll.add(text));
             exec_action(coll, Journal::List)
         }
-        Journal::List => println!("Jornal pages:\n{:?}", coll),
+        Journal::List => println!("{} Jornal pages:\n{:?}", coll.len(), coll),
     };
 }
 
