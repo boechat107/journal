@@ -18,13 +18,12 @@ fn exec_action(coll: &mut Collection, input: Journal) -> () {
             println!("New page id: {}", coll.add(text));
             exec_action(coll, Journal::List)
         }
-        Journal::List => println!("{} Jornal pages:\n{:?}", coll.len(), coll),
+        Journal::List => println!("{} Jornal pages:\n{:#?}", coll.len(), coll),
     };
 }
 
 fn main() {
     let input_args = Journal::from_args();
-    println!("Arguments: {:?}", input_args);
 
     let mut coll = Collection::new();
     exec_action(&mut coll, input_args);
