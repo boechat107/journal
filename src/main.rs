@@ -29,3 +29,26 @@ fn main() {
     let mut coll = Collection::new();
     exec_action(&mut coll, input_args);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_exec_action() {
+        let mut coll = Collection::new();
+
+        // This action changes the Journal.
+        exec_action(
+            &mut coll,
+            Journal::New {
+                text: String::from("my first page"),
+            },
+        );
+        assert_eq!(coll.len(), 1);
+
+        // This action doesn't change anything.
+        exec_action(&mut coll, Journal::List);
+        assert_eq!(coll.len(), 1);
+    }
+}
