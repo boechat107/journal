@@ -47,3 +47,26 @@ impl Collection {
         id
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_journal_pages() {
+        let mut coll = Collection::new();
+
+        let p1_id = coll.add(String::from("I've programmed in Rust"));
+        let p2_id = coll.add(String::from("Code review"));
+
+        assert_eq!(coll.len(), 2);
+
+        let page1 = coll.pages.get(&p1_id).unwrap();
+        assert_eq!(page1.created_at, page1.updated_at);
+
+        let page2 = coll.pages.get(&p2_id).unwrap();
+        assert_eq!(page2.created_at, page2.updated_at);
+
+        assert_eq!(page1.date, page2.date);
+    }
+}
