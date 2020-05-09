@@ -1,6 +1,6 @@
 # Journal
 
-[![Actions Status](https://github.com/boechat107/journal/workflows/rust/badge.svg)](https://github.com/boechat107/journal/actions)
+![Action Status](https://github.com/boechat107/journal/workflows/Rust/badge.svg)
 
 A simplistic personal journal in the command-line.
 
