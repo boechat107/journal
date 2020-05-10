@@ -9,3 +9,5 @@ edition = "2018"
 [dependencies]
 structopt = "0.3.14"
 chrono = "0.4.11"
+serde = { version = "1.0.106", features = ["derive"] }
+bincode = "1.2.1"
