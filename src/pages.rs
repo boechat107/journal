@@ -1,16 +1,34 @@
 use chrono::prelude::{Date, DateTime, Local};
+use serde::{Deserialize, Serialize, Serializer};
 use std::collections::HashMap;
 
-#[derive(Debug)]
+fn serialize_ld<S>(date: &Date<Local>, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str(&date.and_hms(0, 0, 0).to_string())
+}
+
+fn serialize_ldt<S>(dt: &DateTime<Local>, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    serializer.serialize_str(&dt.to_string())
+}
+
+#[derive(Debug, Serialize)]
 struct Page {
     text: String,
+    #[serde(serialize_with = "serialize_ld")]
     date: Date<Local>,
+    #[serde(serialize_with = "serialize_ldt")]
     created_at: DateTime<Local>,
+    #[serde(serialize_with = "serialize_ldt")]
     updated_at: DateTime<Local>,
     tags: Vec<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Collection {
     pages: HashMap<u32, Page>,
     id_cnt: u32,

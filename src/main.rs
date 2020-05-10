@@ -1,4 +1,6 @@
 use crate::pages::Collection;
+use bincode;
+use std::fs::File;
 use structopt::StructOpt;
 
 mod pages;
@@ -27,6 +29,9 @@ fn main() {
 
     let mut coll = Collection::new();
     exec_action(&mut coll, input_args);
+
+    let mut file = File::create("./journal.bin").unwrap();
+    bincode::serialize_into(&mut file, &coll).unwrap();
 }
 
 #[cfg(test)]
