@@ -1,29 +1,16 @@
+use crate::serialization::{local_date, local_datetime};
 use chrono::prelude::{Date, DateTime, Local};
-use serde::{Deserialize, Serialize, Serializer};
+use serde::Serialize;
 use std::collections::HashMap;
-
-fn serialize_ld<S>(date: &Date<Local>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.serialize_str(&date.and_hms(0, 0, 0).to_string())
-}
-
-fn serialize_ldt<S>(dt: &DateTime<Local>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.serialize_str(&dt.to_string())
-}
 
 #[derive(Debug, Serialize)]
 struct Page {
     text: String,
-    #[serde(serialize_with = "serialize_ld")]
+    #[serde(serialize_with = "local_date::serialize")]
     date: Date<Local>,
-    #[serde(serialize_with = "serialize_ldt")]
+    #[serde(serialize_with = "local_datetime::serialize")]
     created_at: DateTime<Local>,
-    #[serde(serialize_with = "serialize_ldt")]
+    #[serde(serialize_with = "local_datetime::serialize")]
     updated_at: DateTime<Local>,
     tags: Vec<String>,
 }

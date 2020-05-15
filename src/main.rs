@@ -4,6 +4,7 @@ use std::fs::File;
 use structopt::StructOpt;
 
 mod pages;
+mod serialization;
 
 #[derive(StructOpt, Debug)]
 enum Journal {
