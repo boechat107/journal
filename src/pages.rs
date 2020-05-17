@@ -15,7 +15,7 @@ struct Page {
     tags: Vec<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Collection {
     pages: HashMap<u32, Page>,
     id_cnt: u32,
