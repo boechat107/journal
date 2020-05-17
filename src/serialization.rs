@@ -1,4 +1,11 @@
+use chrono::prelude::{DateTime, Local};
+
+fn datetime_to_string(dt: &DateTime<Local>) -> String {
+    format!("{:?}", dt)
+}
+
 pub mod local_date {
+    use super::datetime_to_string;
     use chrono::prelude::{Date, DateTime, Local};
     use serde::de;
     use serde::Serializer;
@@ -8,7 +15,8 @@ pub mod local_date {
     where
         S: Serializer,
     {
-        serializer.serialize_str(&date.and_hms(0, 0, 0).to_string())
+        let dt = date.and_hms(0, 0, 0);
+        serializer.serialize_str(&datetime_to_string(&dt))
     }
 
     struct StrLocalDateVisitor;
@@ -17,7 +25,7 @@ pub mod local_date {
     where
         D: de::Deserializer<'de>,
     {
-        Ok(d.deserialize_str(StrLocalDateVisitor)?)
+        Ok(d.deserialize_string(StrLocalDateVisitor)?)
     }
 
     impl<'de> de::Visitor<'de> for StrLocalDateVisitor {
@@ -41,6 +49,7 @@ pub mod local_date {
 }
 
 pub mod local_datetime {
+    use super::datetime_to_string;
     use chrono::prelude::{DateTime, Local};
     use serde::de;
     use serde::Serializer;
@@ -50,7 +59,7 @@ pub mod local_datetime {
     where
         S: Serializer,
     {
-        serializer.serialize_str(&dt.to_string())
+        serializer.serialize_str(&datetime_to_string(dt))
     }
 
     struct StrLocalDateTimeVisitor;
@@ -59,7 +68,7 @@ pub mod local_datetime {
     where
         D: de::Deserializer<'de>,
     {
-        Ok(d.deserialize_str(StrLocalDateTimeVisitor)?)
+        Ok(d.deserialize_string(StrLocalDateTimeVisitor)?)
     }
 
     impl<'de> de::Visitor<'de> for StrLocalDateTimeVisitor {
