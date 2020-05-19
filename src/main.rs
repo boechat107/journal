@@ -27,6 +27,11 @@ fn exec_action(coll: &mut Collection, input: Journal) -> () {
 
 fn main() {
     let input_args = Journal::from_args();
+    // Indicates if the command-line operation mutates data.
+    let is_mutation = match input_args {
+        Journal::List => false,
+        _ => true,
+    };
 
     let mut coll = {
         match File::open("./journal.bin") {
@@ -36,10 +41,10 @@ fn main() {
     };
     exec_action(&mut coll, input_args);
 
-    // TODO: There is no problem to overwrite the file, but it is
-    // better to do it only for data mutations.
-    let mut file = File::create("./journal.bin").unwrap();
-    bincode::serialize_into(&mut file, &coll).unwrap();
+    if is_mutation {
+        let mut file = File::create("./journal.bin").unwrap();
+        bincode::serialize_into(&mut file, &coll).unwrap();
+    }
 }
 
 #[cfg(test)]
