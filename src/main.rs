@@ -15,11 +15,11 @@ enum Journal {
     List,
 }
 
-fn exec_action(coll: &mut Collection, input: Journal) -> () {
+fn exec_action(coll: &mut Collection, input: &Journal) -> () {
     match input {
         Journal::New { text } => {
-            println!("New page id: {}", coll.add(text));
-            exec_action(coll, Journal::List)
+            println!("New page id: {}", coll.add(&text));
+            exec_action(coll, &Journal::List)
         }
         Journal::List => println!("{} Jornal pages:\n{:#?}", coll.len(), coll),
     };
@@ -34,12 +34,16 @@ fn main() {
             Err(_) => Collection::new(),
         }
     };
-    exec_action(&mut coll, input_args);
+    exec_action(&mut coll, &input_args);
 
-    // TODO: There is no problem to overwrite the file, but it is
-    // better to do it only for data mutations.
-    let mut file = File::create("./journal.bin").unwrap();
-    bincode::serialize_into(&mut file, &coll).unwrap();
+    // We save the file only if we've executed a mutation on the data.
+    match input_args {
+        Journal::List => (),
+        _ => {
+            let mut file = File::create("./journal.bin").unwrap();
+            bincode::serialize_into(&mut file, &coll).unwrap();
+        }
+    }
 }
 
 #[cfg(test)]
@@ -53,14 +57,14 @@ mod tests {
         // This action changes the Journal.
         exec_action(
             &mut coll,
-            Journal::New {
+            &Journal::New {
                 text: String::from("my first page"),
             },
         );
         assert_eq!(coll.len(), 1);
 
         // This action doesn't change anything.
-        exec_action(&mut coll, Journal::List);
+        exec_action(&mut coll, &Journal::List);
         assert_eq!(coll.len(), 1);
     }
 }
