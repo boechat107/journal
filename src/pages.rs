@@ -33,14 +33,14 @@ impl Collection {
         self.pages.len()
     }
 
-    pub fn add(&mut self, text: &String) -> u32 {
+    pub fn add(&mut self, text: String) -> u32 {
         let id = self.id_cnt;
         let now = Local::now();
 
         self.pages.insert(
             id,
             Page {
-                text: text.clone(),
+                text,
                 date: Local::today(),
                 created_at: now,
                 updated_at: now,
@@ -61,8 +61,8 @@ mod tests {
     fn test_add_journal_pages() {
         let mut coll = Collection::new();
 
-        let p1_id = coll.add(&String::from("I've programmed in Rust"));
-        let p2_id = coll.add(&String::from("Code review"));
+        let p1_id = coll.add(String::from("I've programmed in Rust"));
+        let p2_id = coll.add(String::from("Code review"));
 
         assert_eq!(coll.len(), 2);
 
