@@ -4,8 +4,6 @@
 
 A simplistic personal journal in the command-line.
 
-> This is a work in progress! Data is not persisted.
-
 ## Installation
 
 There are no released binaries for now. You need to have
@@ -53,6 +51,6 @@ Collection {
 
 ## Roadmap
 
-- [ ] persist data
+- [x] persist data
 - [ ] command to update pages
 - [ ] support for tags

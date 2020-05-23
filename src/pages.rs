@@ -1,16 +1,21 @@
+use crate::serialization::{local_date, local_datetime};
 use chrono::prelude::{Date, DateTime, Local};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Page {
     text: String,
+    #[serde(with = "local_date")]
     date: Date<Local>,
+    #[serde(with = "local_datetime")]
     created_at: DateTime<Local>,
+    #[serde(with = "local_datetime")]
     updated_at: DateTime<Local>,
     tags: Vec<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Collection {
     pages: HashMap<u32, Page>,
     id_cnt: u32,

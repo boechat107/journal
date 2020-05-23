@@ -1,7 +1,13 @@
 use crate::pages::Collection;
+use bincode;
+use std::env;
+use std::fs::File;
 use structopt::StructOpt;
 
 mod pages;
+mod serialization;
+
+const DEFAULT_STORAGE_PATH: &str = "./journal.bin";
 
 #[derive(StructOpt, Debug)]
 enum Journal {
@@ -24,9 +30,27 @@ fn exec_action(coll: &mut Collection, input: Journal) -> () {
 
 fn main() {
     let input_args = Journal::from_args();
-
-    let mut coll = Collection::new();
+    // Indicates if the command-line operation mutates data.
+    let is_mutation = match input_args {
+        Journal::List => false,
+        _ => true,
+    };
+    // Defining the path of the file used for persistence.
+    let fpath = env::var("JOURNAL_STORAGE_PATH").unwrap_or(String::from(DEFAULT_STORAGE_PATH));
+    // Reading an existent Collection from file or creating a new one.
+    let mut coll = {
+        match File::open(&fpath) {
+            Ok(file) => bincode::deserialize_from(file).unwrap(),
+            Err(_) => Collection::new(),
+        }
+    };
+    // Execute the action given by the command-line.
     exec_action(&mut coll, input_args);
+    // If the action changes or adds data, we save a new file (or overwrite one).
+    if is_mutation {
+        let mut file = File::create(fpath).unwrap();
+        bincode::serialize_into(&mut file, &coll).unwrap();
+    }
 }
 
 #[cfg(test)]
