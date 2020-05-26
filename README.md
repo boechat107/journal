@@ -53,4 +53,6 @@ Collection {
 
 - [x] persist data
 - [ ] command to update pages
+- [ ] support filter options for the `list` sub-command
 - [ ] support for tags
+- [ ] improve the string format used to print data on STDOUT
