@@ -56,3 +56,5 @@ Collection {
 - [ ] support filter options for the `list` sub-command
 - [ ] support for tags
 - [ ] improve the string format used to print data on STDOUT
+- [ ] [not sure] another project to provide a local GUI interface (web
+      or native)
